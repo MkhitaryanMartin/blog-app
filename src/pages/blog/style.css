@@ -11,4 +11,34 @@
 }
 .comment{
     margin: 20px 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.comment-userName{
+    margin-right: 20px;
+}
+
+.comment-text-block{
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    margin-bottom: 15px;
+    max-width: 500px;
+    text-align: start;
+}
+
+.comment-text-icon-block{
+    display: flex;
+    
+}
+.comment-text-icon-block p{
+  margin-right: 20px;
+    
+}
+
+.comment-edite-icon{
+    margin: 0 15px;
 }
