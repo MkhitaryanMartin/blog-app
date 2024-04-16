@@ -1,66 +1,82 @@
 import React, { useState } from 'react';
-import { Button, Input, Modal } from 'antd';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { Button, Input, Modal, message } from 'antd';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '../../../firebase';
-import styles from './styles.module.css'
+import styles from './styles.module.css';
+import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 
 export default function RegistModal() {
-
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [copyPassword, setCopyPassword] = useState('')
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [copyPassword, setCopyPassword] = useState('');
+  const [userName, setUsername] = useState('');
+  const [messageApi, contextHolder] = message.useMessage();
 
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
+  const errorHandle = (message) => {
+    messageApi.open({
+      type: 'error',
+      content: message ? message : 'Please check your password or copy password',
+    });
   };
 
   function registor(e) {
-    e.preventDefault()
+    e.preventDefault();
     if (copyPassword !== password) {
-      return
+      errorHandle();
+      return;
     }
-    createUserWithEmailAndPassword(auth, email, password).then((user) => {
-      setEmail('')
-      setPassword('')
-      setCopyPassword('')
-      handleCancel()
-    }).catch((error) => console.log(error))
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        updateProfile(auth.currentUser, {
+          displayName: userName,
+        }).then(() => {
+          setEmail('');
+          setPassword('');
+          setUsername('');
+          setIsModalOpen(false);
+        }).catch((error) => {
+          errorHandle(error.message);
+        });
+      })
+      .catch((error) => errorHandle(error.message));
   }
 
 
   return (
     <>
-      <Button onClick={showModal}>
-        Regisor
-      </Button>
-      <Modal title="Create an account" open={isModalOpen} onCancel={handleCancel}>
-        <form  className={styles.form_container} onSubmit={registor}>
+      <Button onClick={() => setIsModalOpen(true)}>Register</Button>
+      <Modal title="Create an account" open={isModalOpen} onCancel={() => setIsModalOpen(false)} footer={null}>
+        <form className={styles.form_container} onSubmit={registor}>
           <Input
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            type='email'
-            placeholder='Email'
+            type="text"
+            placeholder="Email"
           />
           <Input
-            value={password}
+            value={userName}
+            onChange={(e) => setUsername(e.target.value)}
+            type="text"
+            placeholder="Username"
+          />
+          <Input.Password
+            className={styles.pass_input}
+            placeholder="Input password"
             onChange={(e) => setPassword(e.target.value)}
-            type='password'
-            placeholder='password'
+            iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
           />
-          <Input
-            value={copyPassword}
+          <Input.Password
+            className={styles.pass_input}
+            placeholder="Copy password"
             onChange={(e) => setCopyPassword(e.target.value)}
-            type='password'
-            placeholder='copyPassword'
+            iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
           />
-          <Button>Create</Button>
+          {contextHolder}
+          <button className={styles.btn}>Create</button>
         </form>
       </Modal>
     </>
-  )
+  );
 }

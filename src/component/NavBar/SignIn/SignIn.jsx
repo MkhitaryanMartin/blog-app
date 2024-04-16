@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { Button, Modal } from 'antd';
+import { Button, Modal, Input, message } from 'antd';
 import { auth } from '../../../firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import styles from './styles.module.css'
+import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 
 
 export default function SignIn() {
@@ -9,49 +11,47 @@ export default function SignIn() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [messageApi, contextHolder] = message.useMessage();
 
-
-    const showModal = () => {
-        setIsModalOpen(true);
-    };
-    const handleOk = () => {
-        setIsModalOpen(false);
-    };
-    const handleCancel = () => {
-        setIsModalOpen(false);
+    const errorHandle = (message) => {
+        messageApi.open({
+            type: 'error',
+            content: message ? message : 'Please check your email or password',
+        });
     };
 
     function signIn(e) {
         e.preventDefault();
         signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
             const user = userCredential.user;
-            console.log(user);
+            console.log(user)
             setEmail('');
             setPassword('');
-            alert("All is ok.. Thank you");
-        }).catch((error) => console.log(error));
+            setIsModalOpen(false);
+        }).catch((error) => errorHandle(error.message));
     }
 
     return (
         <>
-            <Button onClick={showModal}>
+            <Button onClick={() => setIsModalOpen(true)}>
                 Sign In
             </Button>
-            <Modal title="Create an account" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-                <form>
-                    <input
+            <Modal title="Create an account" open={isModalOpen} onCancel={() => setIsModalOpen(false)} footer={null}>
+                <form className={styles.form_container}>
+                    <Input
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         type='email'
                         placeholder='Email'
                     />
-                    <input
-                        value={password}
+                    <Input.Password
+                        className={styles.pass_input}
+                        placeholder="input password"
                         onChange={(e) => setPassword(e.target.value)}
-                        type='password'
-                        placeholder='Password'
+                        iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
                     />
-                    <button onClick={signIn}>Sign In</button>
+                    <button onClick={signIn} className={styles.btn} >Sign In</button>
+                    {contextHolder}
                 </form>
             </Modal>
         </>
