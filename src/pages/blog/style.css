@@ -42,3 +42,33 @@
 .comment-edite-icon{
     margin: 0 15px;
 }
+
+.parent-comment{
+    text-decoration: none;
+    margin-bottom: 10px;
+}
+
+.active-comment {
+    animation-name: fadeInOut;
+    animation-duration: 4s;
+  }
+
+.user-comment{
+   align-items: flex-end;
+}
+  
+  @keyframes fadeInOut {
+    0% {
+      background-color: transparent; 
+      color: transparent;
+    }
+    50% {
+      background-color: grey;
+      color: white;
+    }
+    100% {
+      background-color: inherit;
+      color: black; 
+    }
+  }
+  
