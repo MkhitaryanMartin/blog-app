@@ -38,7 +38,7 @@ export default function RegistModal() {
   return (
     <>
       <Button onClick={showModal}>
-        Log In
+        Regisor
       </Button>
       <Modal title="Create an account" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
         <form onSubmit={registor}>

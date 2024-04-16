@@ -1,6 +1,7 @@
 import React from 'react'
 import styles from './styles.module.css'
-import RegistModal from './LogInModal/RegistModal'
+import RegistModal from './Regist/RegistModal'
+import SignIn from './SignIn/SignIn'
 
 export default function NavBar() {
   return (
@@ -8,7 +9,8 @@ export default function NavBar() {
         <div className={styles.nav_container} >
             <div className={styles.logo_container} ></div>
             <div className={styles.log_container} > 
-                <RegistModal />
+            <RegistModal />
+            <SignIn />
              </div>
         </div>
     </nav>
