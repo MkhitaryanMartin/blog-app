@@ -4,7 +4,7 @@ import { auth, firestore } from '../../firebase';
 export default function Blog(){
     const [values, loading, error] = useCollectionData(
         firestore.collection('comments'));
-
+console.log(values)
     const sendMessage =async ()=>{
         firestore.collection("comments").add({
             coment:"asdasd",
