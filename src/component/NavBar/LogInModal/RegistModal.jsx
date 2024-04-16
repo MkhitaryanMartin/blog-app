@@ -27,7 +27,6 @@ export default function RegistModal() {
       return
     }
     createUserWithEmailAndPassword(auth, email, password).then((user) => {
-      console.log(user)
       setEmail('')
       setPassword('')
       setCopyPassword('')
