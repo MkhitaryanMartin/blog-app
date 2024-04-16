@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './styles.module.css'
-import RegistModal from './Regist/RegistModal'
 import SignIn from './SignIn/SignIn'
+import RegistModal from './RegistModal/RegistModal'
 
 export default function NavBar() {
   return (
