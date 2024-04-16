@@ -1,18 +1,20 @@
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { auth, firestore } from '../../firebase';
-
-import { useAuthState } from "react-firebase-hooks/auth"
-import "./style.css"
 import CommentForm from './comment-form';
 import { useState } from 'react';
-import firebase from 'firebase/compat/app';
+import { useAuthState } from "react-firebase-hooks/auth";
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import "./style.css"
+
+
 
 export default function Blog() {
     const [user] = useAuthState(auth)
     const [values, loading, error] = useCollectionData(
         firestore.collection('blogs')
     );
-    const [index, setIndex] = useState("")
+    const [index, setIndex] = useState("");
+    const [openEdte, setOpenEdite] = useState(false)
 
     const createBlog = async () => {
         if (user) {
@@ -36,7 +38,7 @@ export default function Blog() {
             const blogRef = firestore.collection("blogs").doc(params.blogId);
             const blogSnapshot = await blogRef.get();
             const currentComments = blogSnapshot.data().comments || [];
-            const updatedComments = [...currentComments, { ...params, id:Math.random()}];
+            const updatedComments = [...currentComments, { ...params,  id:Math.random()}];
             await blogRef.update({ comments: updatedComments });
             console.log("New comment added to blog with ID:", params.blogId);
         } catch (error) {
@@ -44,29 +46,54 @@ export default function Blog() {
         }
     }
     }
+
+    const deleteComment = async (blogId, commentId) => {
+        try {
+            const blogRef = firestore.collection("blogs").doc(blogId);
+            const blogSnapshot = await blogRef.get();
+            const currentComments = blogSnapshot.data().comments || [];
+            const updatedComments = currentComments.filter(comment => comment.id !== commentId);
+            await blogRef.update({ comments: updatedComments });
+            
+            console.log("Comment deleted successfully:", commentId);
+        } catch (error) {
+            console.error("Error deleting comment:", error);
+        }
+    }
+
+    const editComment = async (e, blogId, commentId, newText) => {
+        e.preventDefault()
+        try {
+            const blogRef = firestore.collection("blogs").doc(blogId);
+            const blogSnapshot = await blogRef.get();
+            const currentComments = blogSnapshot.data().comments || [];
+
+            const updatedComments = currentComments.map(comment => {
+                if (comment.id === commentId) {
+                    return { ...comment, text: newText };
+                }
+                return comment;
+            });
+    
+            await blogRef.update({ comments: updatedComments });
+    
+            console.log("Comment edited successfully:", commentId);
+        } catch (error) {
+            console.error("Error editing comment:", error);
+        }
+        setOpenEdite(false)
+    }
     
     
-    
-
-
-
-    // const addCommentToBlog = async (id) => {
-
-    //     const blogRef = firestore.collection("blogs").doc(id);
-
-    //     await blogRef.update({
-    //         comments: FieldValue.arrayUnion({text:"commentTex"})
-    //     });
-    // }
 
     const addCommentToBlog = async (params) => {
         const blogRef = firestore.collection("blogs").doc(params.blogId);
         const blogSnapshot = await blogRef.get();
         const currentComments = blogSnapshot.data().comments || [];
-        const updatedComments = [...currentComments, { text: params.text,  id: Math.random() }];
+        const updatedComments = [...currentComments, { ...params,  id: Math.random() }];
         await blogRef.update({ comments: updatedComments });
     }
-console.log(user)
+console.log(values)
 return(
    <section>
         <button onClick={createBlog}>createBlog</button>
@@ -83,18 +110,40 @@ return(
                                 e.stopPropagation();
                                 setIndex({blogId:value.id, commentI:i})
                             }}>
-                                <p>{comment.text}</p>
+                                <div className='comment-text-block'>
+                                <p className='comment-userName'>{comment.userName}</p>
+                                <div className='comment-text-icon-block'>
+                                    <p>{comment.text}</p>
+    
+                                   {user.uid === comment.uid ? <>
+                                    <DeleteOutlined className='comment-delet-icon' onClick={(e)=> {
+                                        e.stopPropagation()
+                                        deleteComment(value.id, comment.id)
+
+                                    }}/>
+                                    <EditOutlined className='comment-edite-icon'  onClick={(e)=> {
+                                        e.stopPropagation()
+                                       setOpenEdite(!openEdte)
+
+                                    }}/>
+                                    {openEdte ?  <form className='edite-form' onSubmit={(e)=>editComment(e, value.id, comment.id, e.target.editeText.value)}>
+                                        <input type='text' name='editeText'/>
+                                        <button>Edite comment</button>
+                                    </form>:null}
+                                   </>:null}
+                               </div>
+                                </div>
                                {index.commentI === i && value.id === index.blogId ?  <CommentForm 
                                 handleSubmit={answerComment} 
                                 buttonText='Answer comment' 
                                 placeholder='answer comment'
-                                params={{blogId:value?.id, uid: user?.uid, parentId: comment?.id}}
+                                params={{blogId:value?.id, uid: user?.uid, parentId: comment?.id, userName:user.displayName}}
                                 />:null}
                             </div>
                         })}
                     </div>
            
-                    <CommentForm handleSubmit={addCommentToBlog} buttonText="Create Comment" params={{blogId:value?.id}}/>
+                    <CommentForm handleSubmit={addCommentToBlog} buttonText="Create Comment" params={{blogId:value?.id, uid:user.uid, userName:user.displayName}}/>
             </div>
         })
     }
