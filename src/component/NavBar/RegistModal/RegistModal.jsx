@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Button, Modal } from 'antd';
+import { Button, Input, Modal } from 'antd';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../../firebase';
+import styles from './styles.module.css'
 
 export default function RegistModal() {
 
@@ -10,27 +11,24 @@ export default function RegistModal() {
   const [password, setPassword] = useState('')
   const [copyPassword, setCopyPassword] = useState('')
 
-
   const showModal = () => {
     setIsModalOpen(true);
   };
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
+
   const handleCancel = () => {
     setIsModalOpen(false);
   };
 
-  function registor (e) {
+  function registor(e) {
     e.preventDefault()
-    if(copyPassword !== password){
+    if (copyPassword !== password) {
       return
     }
     createUserWithEmailAndPassword(auth, email, password).then((user) => {
-      console.log(user)
       setEmail('')
       setPassword('')
       setCopyPassword('')
+      handleCancel()
     }).catch((error) => console.log(error))
   }
 
@@ -40,27 +38,27 @@ export default function RegistModal() {
       <Button onClick={showModal}>
         Regisor
       </Button>
-      <Modal title="Create an account" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-        <form onSubmit={registor}>
-          <input
+      <Modal title="Create an account" open={isModalOpen} onCancel={handleCancel}>
+        <form  className={styles.form_container} onSubmit={registor}>
+          <Input
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            type='email' 
+            type='email'
             placeholder='Email'
-            />
-          <input
+          />
+          <Input
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             type='password'
             placeholder='password'
-            />
-          <input
+          />
+          <Input
             value={copyPassword}
             onChange={(e) => setCopyPassword(e.target.value)}
             type='password'
             placeholder='copyPassword'
-            />
-          <button>Create</button>
+          />
+          <Button>Create</Button>
         </form>
       </Modal>
     </>
