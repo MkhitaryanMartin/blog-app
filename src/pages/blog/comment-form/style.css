@@ -1,0 +1,28 @@
+.comment-form{
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    width: 40%;
+    margin: 0 auto;
+    
+}
+
+.comment-form button{
+    max-width: 150px;
+    margin-left: 20px;
+    padding: 0;
+    align-self: flex-end;
+}
+
+.comments-textarea{
+    /* width: 280px; */
+ 
+}
+
+.answer-form{
+    display: flex;
+    flex-direction: column ;
+}
+.answer-form button{
+   margin-top: 10px;
+}
