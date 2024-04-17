@@ -10,6 +10,8 @@ import AddBlog from '../../component/AddBlog/AddBlog';
 import TextArea from 'antd/es/input/TextArea';
 import { Button, Flex } from 'antd';
 import CreatedBlog from '../../component/CreatedBlog/CreatedBlog';
+import { getDayText } from '../../utilits/getData';
+import SignIn from '../../component/NavBar/SignIn/SignIn';
 
 
 
@@ -20,7 +22,8 @@ export default function Blog() {
     );
     const [index, setIndex] = useState("");
     const [openEdte, setOpenEdite] = useState(false);
-    const [parentId, setParentId] = useState("")
+    const [openAnswer, setOpenAnswer] = useState(false);
+    const [parentId, setParentId] = useState("");
 
     const answerComment = async (params) => {
         if (user) {
@@ -52,23 +55,22 @@ export default function Blog() {
         }
     }
 
-    const editComment = async (e, blogId, commentId, newText) => {
-        e.preventDefault()
+    const editComment = async (params) => {
         try {
-            const blogRef = firestore.collection("blogs").doc(blogId);
+            const blogRef = firestore.collection("blogs").doc(params.blogId);
             const blogSnapshot = await blogRef.get();
             const currentComments = blogSnapshot.data().comments || [];
 
             const updatedComments = currentComments.map(comment => {
-                if (comment.id === commentId) {
-                    return { ...comment, text: newText };
+                if (comment.id === params.commentId) {
+                    return { ...comment, text: params.text };
                 }
                 return comment;
             });
 
             await blogRef.update({ comments: updatedComments });
 
-            console.log("Comment edited successfully:", commentId);
+            console.log("Comment edited successfully:", params.commentId);
         } catch (error) {
             console.error("Error editing comment:", error);
         }
@@ -98,6 +100,7 @@ export default function Blog() {
                             {value.comments.map((comment, i) => {
                                 return <div key={i} className={`comment ${parentId === comment.id ? "active-comment" : ""} ${comment?.uid === user?.uid ? "user-comment" : ""}`} id={comment.id}>
                                     <div className='comment-text-block'>
+                                    <p className='comment-date'>{getDayText(comment.createdAt)}</p>
                                         <p className='comment-userName'>{comment.userName}</p>
                                         <Tooltip title="comment that was replied to">
                                             {comment.parentId ? <a onClick={(e) => {
@@ -105,11 +108,12 @@ export default function Blog() {
                                                 setParentId(comment.parentId)
                                                 setTimeout(() => {
                                                     setParentId("")
-                                                }, 5000)
+                                                }, 7000)
                                             }} className='parent-comment' href={`#${comment.parentId}`}>{comment?.parentComment}</a>:null}
                                         </Tooltip>
+                                        <p>{comment.text}</p>
                                         <div className='comment-text-icon-block'>
-                                            <p>{comment.text}</p>
+                                            
                                             {user?.uid === comment.uid ? <>
                                                 <Tooltip title="Delete">
                                                     <DeleteOutlined className='comment-delet-icon' onClick={(e) => {
@@ -121,8 +125,13 @@ export default function Blog() {
                                                 <Tooltip title="Edite">
                                                     <EditOutlined className='comment-edite-icon' onClick={(e) => {
                                                         e.stopPropagation()
-                                                        setOpenEdite(!openEdte)
                                                         setIndex({ commentI: i, blogId: value.id })
+                                                        setOpenAnswer(false)
+                                                        if(index.blogId === value.id && index.commentI === i){
+                                                            setOpenEdite(!openEdte)
+                                                        }else{
+                                                            setOpenEdite(true)
+                                                        }
 
                                                     }} />
                                                 </Tooltip>
@@ -134,30 +143,38 @@ export default function Blog() {
                                                         e.stopPropagation();
                                                         setIndex({ blogId: value.id, commentI: i })
                                                         setOpenEdite(false)
+                                                        if(index.blogId === value.id && index.commentI === i){
+                                                            setOpenAnswer(!openAnswer)
+                                                        }else{
+                                                            setOpenAnswer(true)
+                                                        }
                                                     }} />
                                             </Tooltip> : null}
                                         </div>
                                     </div>
-                                    {index?.commentI === i && value?.id === index?.blogId && !openEdte ? <CommentForm
+                                    {index?.commentI === i && value?.id === index?.blogId && !openEdte && openAnswer ? <CommentForm
                                     mode='answer-form'
                                         handleSubmit={answerComment}
                                         buttonText='Answer comment'
                                         placeholder='Answer comment'
-                                        params={{ blogId: value?.id, uid: user?.uid, parentId: comment?.id, userName: user?.displayName, parentComment: comment?.text }}
-                                    /> : openEdte && i === index.commentI ? <form className='answer-form' onSubmit={(e) => editComment(e, value.id, comment.id, e.target.editeText.value)}>
-                                        <TextArea
-                                            placeholder="Edite comment"
-                                            rows={2}
-                                            name='editeText'
-                                            className='comments-textarea'
-                                        />
-                                        <Button type="link" htmlType='submit'  >Edite comment</Button>
-                                    </form> : null}
+                                        params={{ blogId: value?.id, uid: user?.uid, parentId: comment?.id, userName: user?.displayName, parentComment: comment?.text.substring(0,10) }}
+                                    /> : openEdte && !openAnswer && i === index.commentI && value.id === index.blogId ? <CommentForm
+                                    mode='answer-form'
+                                    params={{blogId:value.id, commentId:comment.id}}
+                                    handleSubmit={editComment}
+                                    placeholder="Edite comment"
+                                    buttonText='Edite comment'
+                                    /> : null}
                                 </div>
                             })}
                         </div>
 
-                        {user && <CommentForm handleSubmit={addCommentToBlog} buttonText="Create Comment" params={{ blogId: value?.id, uid: user?.uid, userName: user?.displayName }} />}
+                        {user ? <CommentForm handleSubmit={addCommentToBlog} buttonText="Create Comment" params={{ blogId: value?.id, uid: user?.uid, userName: user?.displayName }} />: (
+                            <div className='comment-signin'>
+                                <p>Login to write a comment</p> 
+                            <SignIn/>
+                            </div>
+                        ) }
                     </div>
                 })
             }
@@ -165,3 +182,4 @@ export default function Blog() {
     )
 }
 
+                               

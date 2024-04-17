@@ -2,7 +2,7 @@
     display: flex;
     width: 100%;
     justify-content: center;
-    padding: 10px 5px;
+    padding: 0 5px;
 }
 .blog_container {
     display: flex;
