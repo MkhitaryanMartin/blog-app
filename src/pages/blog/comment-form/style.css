@@ -26,3 +26,14 @@
 .answer-form button{
    margin-top: 10px;
 }
+
+.emoji_button {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    outline: inherit;
+    cursor: pointer;
+    font-size: 30px;
+}
