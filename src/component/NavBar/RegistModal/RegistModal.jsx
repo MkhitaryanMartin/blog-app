@@ -18,7 +18,7 @@ export default function RegistModal() {
 
   function registor(e) {
     e.preventDefault();
-    if (copyPassword !== password || !emailError) {
+    if (copyPassword !== password || emailError) {
       errorHandle();
       return;
     }
