@@ -1,28 +1,24 @@
 import React, { useState } from 'react';
-import { Button, Input, Modal, message } from 'antd';
+import { Button, Input, Modal } from 'antd';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '../../../firebase';
 import styles from './styles.module.css';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+import useEmailValidation from '../../../hooks/useEmailValidation';
+import useErrorHandler from '../../../hooks/useErrorHandler';
 
 export default function RegistModal() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [copyPassword, setCopyPassword] = useState('');
   const [userName, setUsername] = useState('');
-  const [messageApi, contextHolder] = message.useMessage();
+  const [errorHandle, contextHolder] = useErrorHandler();
+  const { email, setEmail, emailError, handleChange, validateEmail } = useEmailValidation();
 
-  const errorHandle = (message) => {
-    messageApi.open({
-      type: 'error',
-      content: message ? message : 'Please check your password or copy password',
-    });
-  };
 
   function registor(e) {
     e.preventDefault();
-    if (copyPassword !== password) {
+    if (copyPassword !== password || !emailError) {
       errorHandle();
       return;
     }
@@ -43,7 +39,6 @@ export default function RegistModal() {
       .catch((error) => errorHandle(error.message));
   }
 
-
   return (
     <>
       <Button onClick={() => setIsModalOpen(true)}>Register</Button>
@@ -54,12 +49,15 @@ export default function RegistModal() {
             onChange={(e) => setEmail(e.target.value)}
             type="text"
             placeholder="Email"
+            onBlur={validateEmail}
           />
+          {emailError && <p style={{ color: 'red' }}>{emailError}</p>}
           <Input
             value={userName}
             onChange={(e) => setUsername(e.target.value)}
             type="text"
             placeholder="Username"
+
           />
           <Input.Password
             className={styles.pass_input}
