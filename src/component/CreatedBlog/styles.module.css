@@ -16,7 +16,7 @@
     padding: 5px 10px;
 }
 
-.blog_container::-webkit-scrollbar {
+.text::-webkit-scrollbar {
    display: none;
 }
 

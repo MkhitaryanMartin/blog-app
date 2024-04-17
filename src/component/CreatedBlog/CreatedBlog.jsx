@@ -8,7 +8,7 @@ export default function CreatedBlog({ blog }) {
         <div className={styles.main_container} >
             <div className={styles.blog_container}>
                 <div className={styles.user_info}>
-                <SmileOutlined /> {blog.userName} 
+                <span><SmileOutlined /> {blog.userName}</span> 
                 </div>
                 <div className={styles.title} ><h3>{blog?.blogTitle}</h3></div>
                 <div className={styles.text} >{blog?.blogText}</div>
