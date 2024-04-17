@@ -9,6 +9,7 @@ import "./style.css"
 import AddBlog from '../../component/AddBlog/AddBlog';
 import TextArea from 'antd/es/input/TextArea';
 import { Button, Flex } from 'antd';
+import CreatedBlog from '../../component/CreatedBlog/CreatedBlog';
 
 
 
@@ -92,10 +93,7 @@ export default function Blog() {
             {
                 values && values.map((value, i) => {
                     return <div key={value.id || i} className='blog'>
-                        <div className='blog-text' >
-                            <h3>{value.blogTitle}</h3>
-                            <p>{value.blogText}</p>
-                        </div>
+                        <CreatedBlog blog={value} />
                         <div className='blog-comments'>
                             {value.comments.map((comment, i) => {
                                 return <div key={i} className={`comment ${parentId === comment.id ? "active-comment" : ""} ${comment?.uid === user?.uid ? "user-comment" : ""}`} id={comment.id}>
