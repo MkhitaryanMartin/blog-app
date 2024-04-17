@@ -6,6 +6,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { DeleteOutlined, EditOutlined, CommentOutlined } from '@ant-design/icons';
 import { Tooltip } from 'antd';
 import "./style.css"
+import AddBlog from '../../component/AddBlog/AddBlog';
 
 
 
@@ -17,22 +18,6 @@ export default function Blog() {
     const [index, setIndex] = useState("");
     const [openEdte, setOpenEdite] = useState(false);
     const [parentId, setParentId] = useState("")
-
-    const createBlog = async () => {
-        if (user) {
-            const docRef = await firestore.collection("blogs").add({
-                blogText: "blog text",
-                blogTitle: "title",
-                comments: [],
-                uid: user.uid
-            });
-            const docId = docRef.id;
-            await firestore.collection("blogs").doc(docId).update({
-                id: docId
-            });
-        }
-    }
-
 
     const answerComment = async (params) => {
         if (user) {
@@ -101,7 +86,7 @@ export default function Blog() {
  
     return (
         <section>
-            <button onClick={createBlog}>createBlog</button>
+            {user ? (<AddBlog />): ''}
             {
                 values && values.map((value, i) => {
                     return <div key={value.id || i} className='blog'>
