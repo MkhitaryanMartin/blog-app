@@ -1,12 +1,14 @@
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { auth, firestore } from '../../firebase';
 import CommentForm from './comment-form';
-import {useState } from 'react';
+import { useState } from 'react';
 import { useAuthState } from "react-firebase-hooks/auth";
 import { DeleteOutlined, EditOutlined, CommentOutlined } from '@ant-design/icons';
 import { Tooltip } from 'antd';
 import "./style.css"
 import AddBlog from '../../component/AddBlog/AddBlog';
+import TextArea from 'antd/es/input/TextArea';
+import { Button, Flex } from 'antd';
 
 
 
@@ -25,14 +27,14 @@ export default function Blog() {
                 const blogRef = firestore.collection("blogs").doc(params.blogId);
                 const blogSnapshot = await blogRef.get();
                 const currentComments = blogSnapshot.data().comments || [];
-                const updatedComments = [...currentComments, { ...params, id: Math.random(), createdAt: new Date()}];
+                const updatedComments = [...currentComments, { ...params, id: Math.random(), createdAt: new Date() }];
                 await blogRef.update({ comments: updatedComments });
                 console.log("New comment added to blog with ID:", params.blogId);
             } catch (error) {
                 console.error("Error adding comment:", error);
             }
         }
-         setIndex({})
+        setIndex({})
     }
 
     const deleteComment = async (blogId, commentId) => {
@@ -78,15 +80,15 @@ export default function Blog() {
         const blogRef = firestore.collection("blogs").doc(params.blogId);
         const blogSnapshot = await blogRef.get();
         const currentComments = blogSnapshot.data().comments || [];
-        const updatedComments = [...currentComments, { ...params, id: Math.random(), createdAt: new Date()}];
+        const updatedComments = [...currentComments, { ...params, id: Math.random(), createdAt: new Date() }];
         await blogRef.update({ comments: updatedComments });
     }
 
 
- 
+
     return (
         <section>
-            {user ? (<AddBlog />): ''}
+            {user ? (<AddBlog />) : ''}
             {
                 values && values.map((value, i) => {
                     return <div key={value.id || i} className='blog'>
@@ -96,17 +98,17 @@ export default function Blog() {
                         </div>
                         <div className='blog-comments'>
                             {value.comments.map((comment, i) => {
-                                return <div key={i} className={`comment ${parentId === comment.id?"active-comment":""} ${comment?.uid === user?.uid ? "user-comment":""}`} id={comment.id}>
+                                return <div key={i} className={`comment ${parentId === comment.id ? "active-comment" : ""} ${comment?.uid === user?.uid ? "user-comment" : ""}`} id={comment.id}>
                                     <div className='comment-text-block'>
                                         <p className='comment-userName'>{comment.userName}</p>
                                         <Tooltip title="comment that was replied to">
-                                        <a onClick={(e)=>{
-                                            e.stopPropagation()
-                                            setParentId(comment.parentId)
-                                            setTimeout(()=>{
-                                                setParentId("")
-                                            },5000)
-                                        }} className='parent-comment' href={`#${comment.parentId}`}>{comment?.parentComment}</a>
+                                            {comment.parentId ? <a onClick={(e) => {
+                                                e.stopPropagation()
+                                                setParentId(comment.parentId)
+                                                setTimeout(() => {
+                                                    setParentId("")
+                                                }, 5000)
+                                            }} className='parent-comment' href={`#${comment.parentId}`}>{comment?.parentComment}</a>:null}
                                         </Tooltip>
                                         <div className='comment-text-icon-block'>
                                             <p>{comment.text}</p>
@@ -126,26 +128,32 @@ export default function Blog() {
 
                                                     }} />
                                                 </Tooltip>
-                                               
+
                                             </> : null}
                                             {user ? <Tooltip title="Answer">
-                                                    <CommentOutlined
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            setIndex({ blogId: value.id, commentI: i })
-                                                            setOpenEdite(false)
-                                                        }} />
-                                                </Tooltip>:null}
+                                                <CommentOutlined
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        setIndex({ blogId: value.id, commentI: i })
+                                                        setOpenEdite(false)
+                                                    }} />
+                                            </Tooltip> : null}
                                         </div>
                                     </div>
                                     {index?.commentI === i && value?.id === index?.blogId && !openEdte ? <CommentForm
+                                    mode='answer-form'
                                         handleSubmit={answerComment}
                                         buttonText='Answer comment'
                                         placeholder='Answer comment'
                                         params={{ blogId: value?.id, uid: user?.uid, parentId: comment?.id, userName: user?.displayName, parentComment: comment?.text }}
-                                    /> : openEdte && i === index.commentI ? <form className='edite-form' onSubmit={(e) => editComment(e, value.id, comment.id, e.target.editeText.value)}>
-                                        <input type='text' name='editeText' placeholder='Edite comment'/>
-                                        <button>Edite comment</button>
+                                    /> : openEdte && i === index.commentI ? <form className='answer-form' onSubmit={(e) => editComment(e, value.id, comment.id, e.target.editeText.value)}>
+                                        <TextArea
+                                            placeholder="Edite comment"
+                                            rows={2}
+                                            name='editeText'
+                                            className='comments-textarea'
+                                        />
+                                        <Button type="link" htmlType='submit'  >Edite comment</Button>
                                     </form> : null}
                                 </div>
                             })}

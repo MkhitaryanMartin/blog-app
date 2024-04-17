@@ -1,6 +1,7 @@
 .blog{
     border: 1px solid black;
     margin: 50px 0;
+    padding: 20px;
 }
 .blog-text{
     color:black
@@ -8,17 +9,23 @@
 
 .blog-comments{
     border: 1px solid grey;
+    width: 60%;
+    margin: 0 auto;
+    padding: 20px;
+    margin-bottom: 20px;   
 }
 .comment{
-    margin: 20px 0;
-    padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    justify-content: center;
+
+    max-width: 100%;
+    min-width: 270px;
 }
 
 .comment-userName{
-    margin-right: 20px;
+    margin: 0 20px 10px 0;
 }
 
 .comment-text-block{
@@ -28,6 +35,11 @@
     margin-bottom: 15px;
     max-width: 500px;
     text-align: start;
+    border: 1px solid gray;
+    border-radius: 10px;
+    margin: 20px 0;
+    padding: 20px;
+    min-width: 260px;
 }
 
 .comment-text-icon-block{
@@ -46,8 +58,23 @@
 .parent-comment{
     text-decoration: none;
     margin-bottom: 10px;
+    color:  white;
+    background-color: #1677FF;
+    text-align: center;
+    border-radius: 10px;
+    padding: 1%;
+    position: relative;
 }
-
+.parent-comment::after {
+  content: "";
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 10px;
+  border-style: solid;
+  border-color: #1677FF transparent transparent transparent;
+}
 .active-comment {
     animation-name: fadeInOut;
     animation-duration: 4s;
@@ -55,8 +82,16 @@
 
 .user-comment{
    align-items: flex-end;
+   text-align: end;
 }
+.user-comment p{
+  color: gray;
+}
+.user-comment .comment-text-icon-block{
+  display: flex;
+  justify-content: flex-end;
   
+}
   @keyframes fadeInOut {
     0% {
       background-color: transparent; 

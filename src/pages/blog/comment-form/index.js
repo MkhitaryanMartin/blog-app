@@ -1,8 +1,13 @@
+import TextArea from 'antd/es/input/TextArea';
+import { Button, Flex } from 'antd';
+import "./style.css"
+
 export default function CommentForm({
     placeholder="",
     handleSubmit,
     buttonText="",
-    params
+    params,
+    mode="comment-form"
 }){
    
 const onSubmit = (e)=>{
@@ -10,9 +15,14 @@ const onSubmit = (e)=>{
     handleSubmit({...params,text:e.target.comment.value})
 }
     return (
-        <form className="comment-form" onSubmit={onSubmit}>
-            <input type="text" placeholder={placeholder} name="comment"/>
-            <button type="submit">{buttonText}</button>
+        <form className={mode} onSubmit={onSubmit}>
+            <TextArea
+                placeholder={placeholder}
+                rows={2}
+                name='comment'
+                className='comments-textarea'
+                />
+            <Button type="link" htmlType='submit'>{buttonText}</Button>
         </form>
     )
 }
