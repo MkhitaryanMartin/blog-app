@@ -1,25 +1,30 @@
 .blog{
-    border: 1px solid black;
     margin: 50px 0;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 .blog-text{
     color:black
 }
 
 .blog-comments{
-    border: 1px solid grey;
-    width: 60%;
-    margin: 0 auto;
+  border: 2px solid #4096ff;;
+    width: 100%;
+    max-width: 1025px;
     padding: 20px;
-    margin-bottom: 20px;   
+    margin-bottom: 20px;
+    max-height: 600px;
+    overflow-y: auto;
+    border-radius: 10px;
+    border-top: none;
 }
 .comment{
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
-
     max-width: 100%;
     min-width: 270px;
 }
@@ -28,6 +33,10 @@
     margin: 0 20px 10px 0;
 }
 
+.comment-date{
+  text-align: end;
+  margin: 5px 0 20px 0;
+}
 .comment-text-block{
     display: flex;
     justify-content: flex-start;
@@ -35,19 +44,20 @@
     margin-bottom: 15px;
     max-width: 500px;
     text-align: start;
-    border: 1px solid gray;
+    border: 1px solid #1677FF;
     border-radius: 10px;
     margin: 20px 0;
-    padding: 20px;
+    padding: 0 20px 20px 20px;
     min-width: 260px;
+    color: #1677FF;
 }
 
 .comment-text-icon-block{
-    display: flex;
+ margin-top: 10px;
     
 }
 .comment-text-icon-block p{
-  margin-right: 20px;
+  margin-bottom: 10px;
     
 }
 
@@ -57,53 +67,84 @@
 
 .parent-comment{
     text-decoration: none;
-    margin-bottom: 10px;
-    color:  white;
-    background-color: #1677FF;
+    margin-bottom: 20px;
+    color:  gray;
+   border: 1px solid gray;
     text-align: center;
     border-radius: 10px;
     padding: 1%;
     position: relative;
+    width: 150px;
+    padding: 5px;
 }
 .parent-comment::after {
   content: "";
   position: absolute;
   bottom: -20px;
-  left: 50%;
+  left: 10%;
   transform: translateX(-50%);
   border-width: 10px;
   border-style: solid;
-  border-color: #1677FF transparent transparent transparent;
+  border-color: gray transparent transparent transparent;
 }
-.active-comment {
+.active-comment .comment-text-block{
     animation-name: fadeInOut;
     animation-duration: 4s;
+   
   }
 
-.user-comment{
+.user-comment {
    align-items: flex-end;
    text-align: end;
 }
 .user-comment p{
-  color: gray;
+  color: #1677FF;
 }
 .user-comment .comment-text-icon-block{
   display: flex;
   justify-content: flex-end;
-  
+  max-width: 100%;
+  margin-top: 10px;
 }
+
+.user-comment .comment-text-icon-block p{
+  overflow-wrap: break-word;
+  max-width: 80%;
+  word-wrap: break-word;
+}
+
+.user-comment .comment-text-block{
+  display: flex;
+  align-items: flex-end;
+}
+
+.user-comment .parent-comment::after{
+  left: 90%;
+}
+
+.comment-signin p{
+  margin-bottom: 10px;
+}
+
   @keyframes fadeInOut {
     0% {
-      background-color: transparent; 
-      color: transparent;
+      transform: scale(0.9);
+    }
+    25% {
+      transform: scale(1);
     }
     50% {
-      background-color: grey;
-      color: white;
+      transform: scale(1.1);
+    }
+    60% {
+      transform: scale(1.2);
+      background-color: white;
+    }
+    70% {
+      transform: scale(1.1);
     }
     100% {
-      background-color: inherit;
-      color: black; 
+      transform: scale(1);
     }
   }
   
