@@ -1,6 +1,6 @@
 import { message } from 'antd';
 
-const useErrorHandler = (e) => {
+const useErrorHandler = () => {
     const [messageApi, contextHolder] = message.useMessage();
 
     const errorHandle = (e) => {
