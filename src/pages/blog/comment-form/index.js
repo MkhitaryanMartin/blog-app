@@ -8,7 +8,6 @@ export default function CommentForm({
 const onSubmit = (e)=>{
     e.preventDefault()
     handleSubmit({...params,text:e.target.comment.value})
-    console.log(params,"as")
 }
     return (
         <form className="comment-form" onSubmit={onSubmit}>

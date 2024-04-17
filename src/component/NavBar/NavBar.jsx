@@ -15,7 +15,7 @@ export default function NavBar() {
         const listen = onAuthStateChanged(auth, (user) => {
             if (user) {
                 setAuthUser(user)
-                setUserName(user.displayName)
+                setUserName(user?.displayName)
             } else {
                 setAuthUser(null)
             }
