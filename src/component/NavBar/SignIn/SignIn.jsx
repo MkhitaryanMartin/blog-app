@@ -1,24 +1,19 @@
 import React, { useState } from 'react';
-import { Button, Modal, Input, message } from 'antd';
+import { Button, Modal, Input } from 'antd';
 import { auth } from '../../../firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import styles from './styles.module.css'
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
-
+import useEmailValidation from '../../../hooks/useEmailValidation';
+import useErrorHandler from '../../../hooks/useErrorHandler';
 
 export default function SignIn() {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [email, setEmail] = useState('');
+    const { email, setEmail, emailError, handleChange, validateEmail } = useEmailValidation();
     const [password, setPassword] = useState('');
-    const [messageApi, contextHolder] = message.useMessage();
+    const [errorHandle, contextHolder] = useErrorHandler();
 
-    const errorHandle = (message) => {
-        messageApi.open({
-            type: 'error',
-            content: message ? message : 'Please check your email or password',
-        });
-    };
 
     function signIn(e) {
         e.preventDefault();
@@ -41,9 +36,11 @@ export default function SignIn() {
                     <Input
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        type='email'
-                        placeholder='Email'
+                        type="text"
+                        placeholder="Email"
+                        onBlur={validateEmail}
                     />
+                    {emailError && <p style={{ color: 'red' }}>{emailError}</p>}
                     <Input.Password
                         className={styles.pass_input}
                         placeholder="input password"
