@@ -24,7 +24,7 @@ export default function NavBar() {
         return () => {
             listen();
         };
-    }, [userName])
+    }, [])
 
     function userSignOut() {
         setLoading(true) 

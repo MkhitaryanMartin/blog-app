@@ -39,11 +39,26 @@ export default function RegistModal() {
       .catch((error) => errorHandle(error.message));
   }
 
+  const handlePassword = (e) => {
+    const { name, value } = e.target;
+    console.log(value)
+    if (value === " " || value !== value.trim()) {
+        errorHandle("Password can not start with space or and")
+        return
+    }
+    if (name === "password") {
+      setPassword(value);
+    } else if (name === "copyPassword") {
+      setCopyPassword(value);
+    }
+};
+
   return (
     <>
       <Button onClick={() => setIsModalOpen(true)}>Register</Button>
       <Modal title="Create an account" open={isModalOpen} onCancel={() => setIsModalOpen(false)} footer={null}>
         <form className={styles.form_container} onSubmit={registor}>
+          <p className={styles.title_input} >Select your email</p>
           <Input
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -52,6 +67,7 @@ export default function RegistModal() {
             onBlur={validateEmail}
           />
           {emailError && <p style={{ color: 'red' }}>{emailError}</p>}
+          <p className={styles.title_input} >Select your name</p>
           <Input
             value={userName}
             onChange={(e) => setUsername(e.target.value)}
@@ -59,16 +75,20 @@ export default function RegistModal() {
             placeholder="Username"
 
           />
+          <p className={styles.title_input} >Select your password</p>
           <Input.Password
             className={styles.pass_input}
             placeholder="Input password"
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={handlePassword}
+            name='password'
             iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
           />
+          <p className={styles.title_input} >Copy your password</p>
           <Input.Password
             className={styles.pass_input}
             placeholder="Copy password"
-            onChange={(e) => setCopyPassword(e.target.value)}
+            name='copyPassword'
+            onChange={handlePassword}
             iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
           />
           {contextHolder}

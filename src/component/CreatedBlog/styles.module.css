@@ -14,7 +14,6 @@
     border-radius: 10px;
     flex-direction: column;
     padding: 5px 10px;
-    overflow-y: auto;
 }
 
 .blog_container::-webkit-scrollbar {
@@ -29,4 +28,10 @@
 .text {
     margin-top: 15px;
     text-align: start;
+    overflow-y: auto;
 }
+
+.title {
+    overflow-wrap: break-word;
+}
+

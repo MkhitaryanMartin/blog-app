@@ -13,6 +13,12 @@
     width: auto;
     padding-bottom: 1%;
 }
+.title_input {
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+    color: #8d9094;
+}
 
 .btn {
     display: inline-block;

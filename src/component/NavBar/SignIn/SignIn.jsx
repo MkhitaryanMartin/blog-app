@@ -33,6 +33,7 @@ export default function SignIn() {
             </Button>
             <Modal title="Create an account" open={isModalOpen} onCancel={() => setIsModalOpen(false)} footer={null}>
                 <form className={styles.form_container}>
+                <p className={styles.title_input} >Select your email</p>
                     <Input
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
@@ -41,6 +42,7 @@ export default function SignIn() {
                         onBlur={validateEmail}
                     />
                     {emailError && <p style={{ color: 'red' }}>{emailError}</p>}
+                    <p className={styles.title_input} >Select your password</p>
                     <Input.Password
                         className={styles.pass_input}
                         placeholder="input password"
