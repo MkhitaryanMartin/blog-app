@@ -122,6 +122,7 @@ export default function Blog() {
                             user={user}
                             value={value}
                         />
+                        
 
                         {user ? <CommentForm
                             handleSubmit={addCommentToBlog}

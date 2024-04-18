@@ -74,6 +74,7 @@ export default function CommentList({ value, user }) {
                 return <div key={i} 
                 className={`${styles.comment} ${parentId === comment.id ? styles.active_comment : ""}
                  ${comment?.uid === user?.uid ? styles.user_comment : ""}`} id={comment.id}>
+                    
                     <div className={styles.comment_text_block}>
                         <p className={styles.comment_date}>{getDayText(comment.createdAt)}</p>
                         <p className={styles.comment_userName}>{comment.userName}</p>
