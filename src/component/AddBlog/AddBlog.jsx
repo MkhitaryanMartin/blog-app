@@ -14,7 +14,6 @@ export default function AddBlog({ onSubmit, blogId, submitText = "" }) {
     const [text, setText] = useState('');
     const [errorHandle, contextHolder] = useErrorHandler();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [test, setTest] = useState('')
 
     const handleSubmit = (e) => {
         e.preventDefault();
