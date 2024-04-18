@@ -21,6 +21,7 @@ export default function RegistModal() {
     e.preventDefault();
     if (copyPassword !== password || emailError || userName.length < 1) {
       errorHandle(copyPassword !== password ? "Slect the correct password" : "Fill all inputs");
+      setSwitchError(true)
       return;
     }
     createUserWithEmailAndPassword(auth, email, password)
