@@ -25,7 +25,6 @@ export default function RegistModal() {
   const registor = async (e) => {
     e.preventDefault();
   
-    // Проверка условий для регистрации
     if (copyPassword !== password || emailError || userName.length < 1) {
       errorHandle(copyPassword !== password ? "Select the correct password" : "Fill all inputs");
       setSwitchError(true);
@@ -33,37 +32,32 @@ export default function RegistModal() {
     }
   
     try {
-      // Создание нового пользователя с помощью электронной почты и пароля
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
   
-      // Обновление профиля пользователя с именем пользователя
       await updateProfile(auth.currentUser, {
         displayName: userName,
-        photoURL: null // Устанавливаем null, пока не получим URL фотографии
+        photoURL: null 
       });
   
-      // Выполнение загрузки фотографии и получение URL фотографии
       const photoData = photo;
-      const photoRef = ref(storage, 'userPhotos/photo.jpg');
+      const photoRef = ref(storage, `userPhotos/${Date.now()}.jpg`);
       await uploadString(photoRef, photoData, 'data_url');
       const photoURL = await getDownloadURL(photoRef);
   
-      // Обновление профиля пользователя с полученным URL фотографии
       await updateProfile(auth.currentUser, {
         photoURL: photoURL
       });
   
-      // Сброс значений полей и закрытие модального окна
       setEmail('');
       setPassword('');
       setUsername('');
       setIsModalOpen(false);
     } catch (error) {
-      // Обработка ошибок
       errorHandle(error.message);
     }
   }
+  
   
 
   const handlePassword = (e) => {

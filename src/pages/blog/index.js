@@ -92,6 +92,8 @@ export default function Blog() {
     const handleOptionChange = (option) => {
         setSelectedOption(option);
     };
+
+    console.log(values)
     return (
         <section>
             <div className={styles.creator_blog} >

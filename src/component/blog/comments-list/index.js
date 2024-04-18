@@ -81,7 +81,7 @@ export default function CommentList({ value, user }) {
                     <div className={styles.comment_text_block}>
                         <p className={styles.comment_date}>{getDayText(comment.createdAt)}</p>
                       <div className={styles.avatar_title}>
-                      {comment?.photoURL ? <Avatar src={user?.photoURL} size={44} />:<Avatar size={44} icon={<UserOutlined />} />}
+                      {comment?.photoURL ? <Avatar src={comment?.photoURL} size={44} />:<Avatar size={44} icon={<UserOutlined />} />}
                         <p className={styles.comment_userName}>{comment.userName}</p>
                       </div>
                         <Tooltip title="comment that was replied to">

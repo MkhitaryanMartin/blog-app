@@ -18,8 +18,9 @@ export default function CreatedBlog({ blog, deleteBlog, editBlog, user }) {
     return (
         <div className={styles.main_container} >
             <div className={styles.blog_container}>
-                <div className={styles.user_info}>
-                    <span>{blog?.photoURL ? <Avatar src={user?.photoURL} size={44} />:<Avatar size={44} icon={<UserOutlined />} />} {blog.userName} <span>{getDayText(blog?.createdAt)}</span></span>
+            <span className={styles.date}>{getDayText(blog?.createdAt)}</span>
+                <div className={styles.user_info}> 
+                    <p>{blog?.photoURL  ? <Avatar src={blog?.photoURL} size={44} />:<Avatar size={44} icon={<UserOutlined />} />} <span>{blog.userName} </span></p>
                     {
                         user?.uid === blog.uid ? <div className={styles.icon_block}>
                             <Tooltip title="Delete yor blog" className={styles.delete_icon}>
