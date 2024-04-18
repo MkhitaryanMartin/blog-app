@@ -1,4 +1,4 @@
-.comment-form{
+.comment_form{
     display: flex;
     align-items: flex-end;
     justify-content: center;
@@ -7,23 +7,19 @@
     
 }
 
-.comment-form button{
+.comment_form button{
     max-width: 150px;
     margin-left: 20px;
     padding: 0;
     align-self: flex-end;
 }
 
-.comments-textarea{
-    /* width: 280px; */
- 
-}
 
-.answer-form{
+.answer_form{
     display: flex;
     flex-direction: column ;
 }
-.answer-form button{
+.answer_form button{
    margin-top: 10px;
 }
 

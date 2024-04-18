@@ -5,11 +5,11 @@
     flex-direction: column;
     align-items: center;
 }
-.blog-text{
+.blog_text{
     color:black
 }
 
-.blog-comments{
+.blog_comments{
   border: 2px solid #4096ff;;
     width: 100%;
     max-width: 1025px;
@@ -29,15 +29,15 @@
     min-width: 270px;
 }
 
-.comment-userName{
+.comment_userName{
     margin: 0 20px 10px 0;
 }
 
-.comment-date{
+.comment_date{
   text-align: end;
   margin: 5px 0 20px 0;
 }
-.comment-text-block{
+.comment_text_block{
     display: flex;
     justify-content: flex-start;
     flex-direction: column;
@@ -52,20 +52,20 @@
     color: #1677FF;
 }
 
-.comment-text-icon-block{
+.comment_text_icon_block{
  margin-top: 10px;
     
 }
-.comment-text-icon-block p{
+.comment_text_icon_block p{
   margin-bottom: 10px;
     
 }
 
-.comment-edite-icon{
+.comment_edite_icon{
     margin: 0 15px;
 }
 
-.parent-comment{
+.parent_comment{
     text-decoration: none;
     margin-bottom: 20px;
     color:  gray;
@@ -77,7 +77,7 @@
     width: 150px;
     padding: 5px;
 }
-.parent-comment::after {
+.parent_comment::after {
   content: "";
   position: absolute;
   bottom: -20px;
@@ -87,47 +87,58 @@
   border-style: solid;
   border-color: gray transparent transparent transparent;
 }
-.active-comment .comment-text-block{
+.active_comment .comment_text_block{
     animation-name: fadeInOut;
     animation-duration: 4s;
    
   }
 
-.user-comment {
+.user_comment {
    align-items: flex-end;
    text-align: end;
 }
-.user-comment p{
+.user_comment p{
   color: #1677FF;
 }
-.user-comment .comment-text-icon-block{
+.user_comment .comment_text_icon_block{
   display: flex;
   justify-content: flex-end;
   max-width: 100%;
   margin-top: 10px;
 }
 
-.user-comment .comment-text-icon-block p{
+.user_comment .comment_text_icon_block p{
   overflow-wrap: break-word;
   max-width: 80%;
   word-wrap: break-word;
 }
 
-.user-comment .comment-text-block{
+.user_comment .comment_text_block{
   display: flex;
   align-items: flex-end;
 }
 
-.user-comment .parent-comment::after{
+.user_comment .parent_comment::after{
   left: 90%;
 }
 
-.comment-signin p{
+.comment_signin p{
   margin-bottom: 10px;
 }
-.blog-filter-block{
+.blog_filter_block{
   margin-top: 50px;
 }
+
+.blog_button_container {
+  margin: 15px;
+}
+
+.creator_blog {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
 
 @keyframes fadeInOut {
   0% {

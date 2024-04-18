@@ -1,9 +1,10 @@
 import TextArea from 'antd/es/input/TextArea';
 import { Button, Flex, Modal } from 'antd';
-import "./style.css"
 import { useState } from 'react';
 import { SmileTwoTone } from '@ant-design/icons'
 import EmojiPicker from 'emoji-picker-react';
+import styles from './styles.module.css'
+
 
 export default function CommentForm({
     placeholder = "",
@@ -32,13 +33,13 @@ export default function CommentForm({
                 placeholder={placeholder}
                 rows={2}
                 name='comment'
-                className='comments-textarea'
+                className={styles.comments_textarea}
                 onChange={onChange}
                 value={value}
             />
             <Button type="link" htmlType='submit' disabled={!(!!value) || !value.trim()}>{buttonText}</Button>
             <button 
-            className='emoji_button'
+            className={styles.emoji_button}
             onClick={(e) => {
                 e.preventDefault()
                 setIsModalOpen(true)
