@@ -4,7 +4,7 @@ import CommentForm from './comment-form';
 import { useEffect, useState } from 'react';
 import { useAuthState } from "react-firebase-hooks/auth";
 import { DeleteOutlined, EditOutlined, CommentOutlined } from '@ant-design/icons';
-import {Tooltip } from 'antd';
+import {Button, Tooltip } from 'antd';
 import AddBlog from '../../component/AddBlog/AddBlog';
 import CreatedBlog from '../../component/CreatedBlog/CreatedBlog';
 import { getDayText } from '../../utilits/getData';
@@ -27,6 +27,7 @@ export default function Blog() {
     const [openAnswer, setOpenAnswer] = useState(false);
     const [parentId, setParentId] = useState("");
     const [searchBlog, setSearchBlog] = useState("")
+    const [showBlog, setShowBlog] = useState(false)
 
 
 
@@ -148,10 +149,10 @@ if(!user){
     setSearchBlog("")
 }
 },[user])
-console.log(selectedOption)
     return (
         <section>
-            {user ? (<AddBlog  onSubmit={createBlog} submitText='Create blog'/>) : ''}
+            {showBlog === true ? <AddBlog  onSubmit={createBlog} submitText='Create blog'/> : ''}
+            {user ? ( <Button onClick={() => {showBlog === false ? setShowBlog(true) : setShowBlog(false)}} >Open</Button>) : ''}
             <BlogFilter value={searchBlog} onChange={onChanSearch} onChangeRadio={handleOptionChange} valiuRadio={selectedOption} user={user}/>
             {
                 values && values.filter((value)=>{
