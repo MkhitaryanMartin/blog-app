@@ -1,4 +1,8 @@
 export function getDayText(timestamp) {
+    if (!timestamp) {
+        return ""; 
+    }
+
     const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
 
     const day = String(date.getDate()).padStart(2, '0'); 

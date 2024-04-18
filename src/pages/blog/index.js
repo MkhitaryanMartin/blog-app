@@ -5,20 +5,19 @@ import { useState } from 'react';
 import { useAuthState } from "react-firebase-hooks/auth";
 import { DeleteOutlined, EditOutlined, CommentOutlined } from '@ant-design/icons';
 import { Tooltip } from 'antd';
-import "./style.css"
 import AddBlog from '../../component/AddBlog/AddBlog';
-import TextArea from 'antd/es/input/TextArea';
-import { Button, Flex } from 'antd';
 import CreatedBlog from '../../component/CreatedBlog/CreatedBlog';
 import { getDayText } from '../../utilits/getData';
 import SignIn from '../../component/NavBar/SignIn/SignIn';
-
+import { v4 as uuidv4 } from 'uuid';
+import firebase from 'firebase/compat/app';
+import "./style.css"
 
 
 export default function Blog() {
     const [user] = useAuthState(auth)
     const [values, loading, error] = useCollectionData(
-        firestore.collection('blogs')
+        firestore.collection('blogs').orderBy("createdAt", "desc")
     );
     const [index, setIndex] = useState("");
     const [openEdte, setOpenEdite] = useState(false);
@@ -31,7 +30,7 @@ export default function Blog() {
                 const blogRef = firestore.collection("blogs").doc(params.blogId);
                 const blogSnapshot = await blogRef.get();
                 const currentComments = blogSnapshot.data().comments || [];
-                const updatedComments = [...currentComments, { ...params, id: Math.random(), createdAt: new Date() }];
+                const updatedComments = [...currentComments, { ...params, id: uuidv4(), createdAt: new Date() }];
                 await blogRef.update({ comments: updatedComments });
                 console.log("New comment added to blog with ID:", params.blogId);
             } catch (error) {
@@ -55,6 +54,18 @@ export default function Blog() {
         }
     }
 
+    const deleteBlog = async (blogId) => {
+        try {
+            const blogRef = firestore.collection("blogs").doc(blogId);
+            await blogRef.delete();
+    
+            console.log("Blog deleted successfully:", blogId);
+        } catch (error) {
+            console.error("Error deleting blog:", error);
+        }
+    }
+    
+
     const editComment = async (params) => {
         try {
             const blogRef = firestore.collection("blogs").doc(params.blogId);
@@ -77,25 +88,54 @@ export default function Blog() {
         setOpenEdite(false)
     }
 
-
+    const editBlog = async (params) => {
+        console.log(params)
+        try {
+            const blogRef = firestore.collection("blogs").doc(params.blogId);
+            await blogRef.update({
+                blogTitle: params.title,
+                blogText: params.text
+            });
+    
+            console.log("Blog edited successfully:", params.blogId);
+        } catch (error) {
+            console.error("Error editing blog:", error);
+        }
+    };
 
     const addCommentToBlog = async (params) => {
         const blogRef = firestore.collection("blogs").doc(params.blogId);
         const blogSnapshot = await blogRef.get();
         const currentComments = blogSnapshot.data().comments || [];
-        const updatedComments = [...currentComments, { ...params, id: Math.random(), createdAt: new Date() }];
+        const updatedComments = [...currentComments, { ...params, id: uuidv4(), createdAt: new Date() }];
         await blogRef.update({ comments: updatedComments });
     }
 
-
-
+const createBlog = async (params)=>{
+    if (user) {
+        const docRef = await firestore.collection("blogs").add({
+            blogText: params.text,
+            blogTitle: params.title,
+            comments: [],
+            uid: user.uid,
+            userName: user.displayName,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        const docId = docRef.id;
+        await firestore.collection("blogs").doc(docId).update({
+            id: docId
+        });
+      
+    }
+}
+console.log(values)
     return (
         <section>
-            {user ? (<AddBlog />) : ''}
+            {user ? (<AddBlog  onSubmit={createBlog} submitText='Create blog'/>) : ''}
             {
                 values && values.map((value, i) => {
                     return <div key={value.id || i} className='blog'>
-                        <CreatedBlog blog={value} />
+                        <CreatedBlog blog={value} deleteBlog={deleteBlog} editBlog={editBlog}/>
                         <div className='blog-comments'>
                             {value.comments.map((comment, i) => {
                                 return <div key={i} className={`comment ${parentId === comment.id ? "active-comment" : ""} ${comment?.uid === user?.uid ? "user-comment" : ""}`} id={comment.id}>
