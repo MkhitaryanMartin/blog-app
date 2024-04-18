@@ -23,8 +23,7 @@ export default function CommentForm({
     const onChange = (e) => setValue(e.target.value)
 
     const handleEmojiClick = (emoji) => {
-        const newValue = value + emoji.emoji;
-        setValue(newValue);
+        setValue(value => value + emoji.emoji);
         setIsModalOpen(false);
     };
     return (
