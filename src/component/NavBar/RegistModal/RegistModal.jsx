@@ -14,12 +14,13 @@ export default function RegistModal() {
   const [userName, setUsername] = useState('');
   const [errorHandle, contextHolder] = useErrorHandler();
   const { email, setEmail, emailError, handleChange, validateEmail } = useEmailValidation();
+  const [switchErorr, setSwitchError] = useState(false)
 
 
   function registor(e) {
     e.preventDefault();
-    if (copyPassword !== password || emailError) {
-      errorHandle();
+    if (copyPassword !== password || emailError || userName.length < 1) {
+      errorHandle(copyPassword !== password ? "Slect the correct password" : "Fill all inputs");
       return;
     }
     createUserWithEmailAndPassword(auth, email, password)
@@ -41,21 +42,20 @@ export default function RegistModal() {
 
   const handlePassword = (e) => {
     const { name, value } = e.target;
-    console.log(value)
     if (value === " " || value !== value.trim()) {
-        errorHandle("Password can not start with space or and")
-        return
+      errorHandle("Password can not start with space or and")
+      return
     }
     if (name === "password") {
       setPassword(value);
     } else if (name === "copyPassword") {
       setCopyPassword(value);
     }
-};
+  };
 
   return (
     <>
-      <Button onClick={() => setIsModalOpen(true)}>Register</Button>
+      <Button className={styles.customButton} onClick={() => setIsModalOpen(true)}>register</Button>
       <Modal title="Create an account" open={isModalOpen} onCancel={() => setIsModalOpen(false)} footer={null}>
         <form className={styles.form_container} onSubmit={registor}>
           <p className={styles.title_input} >Select your email</p>
@@ -70,11 +70,19 @@ export default function RegistModal() {
           <p className={styles.title_input} >Select your name</p>
           <Input
             value={userName}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={(e) => {
+              const trimmedValue = e.target.value.trim();
+              if (trimmedValue.length <= 16 && !/\s/.test(trimmedValue)) {
+                setUsername(trimmedValue);
+                setSwitchError(false)
+              }else {
+                setSwitchError(true)
+              }
+            }}
             type="text"
             placeholder="Username"
-
           />
+          {switchErorr === true ? <p style={{ color: 'red' }}>You cant add more than 16sibels</p> : ""}
           <p className={styles.title_input} >Select your password</p>
           <Input.Password
             className={styles.pass_input}

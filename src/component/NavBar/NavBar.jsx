@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styles from './styles.module.css'
 import SignIn from './SignIn/SignIn'
-import RegistModal from './RegistModal/RegistModal'
 import { onAuthStateChanged, signOut } from 'firebase/auth'
 import { auth } from '../../firebase'
 import { Button, Spin } from 'antd' 
@@ -14,17 +13,21 @@ export default function NavBar() {
     useEffect(() => {
         const listen = onAuthStateChanged(auth, (user) => {
             if (user) {
-                setAuthUser(user)
-                setUserName(user?.displayName)
+                setAuthUser(user);
+                if (user.displayName) {
+                    setUserName(user.displayName);
+                }
             } else {
-                setAuthUser(null)
+                setAuthUser(null);
             }
-            setLoading(false)
-        })
+            setLoading(false);
+        });
+    
         return () => {
             listen();
         };
-    }, [])
+    }, []);
+    
 
     function userSignOut() {
         setLoading(true) 
@@ -50,7 +53,6 @@ export default function NavBar() {
                     </div>
                 ) : (
                     <div className={styles.log_container}>
-                        <RegistModal />
                         <SignIn />
                     </div>
                 )}

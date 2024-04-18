@@ -6,7 +6,7 @@ const useErrorHandler = () => {
     const errorHandle = (e) => {
         messageApi.open({
             type: 'error',
-            content: e ? e : 'Please add title or text',
+            content: e ? e : 'Add Name pls',
         });
     };
 

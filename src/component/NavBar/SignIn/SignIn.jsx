@@ -6,6 +6,7 @@ import styles from './styles.module.css'
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import useEmailValidation from '../../../hooks/useEmailValidation';
 import useErrorHandler from '../../../hooks/useErrorHandler';
+import RegistModal from '../RegistModal/RegistModal'
 
 export default function SignIn() {
 
@@ -33,7 +34,7 @@ export default function SignIn() {
             </Button>
             <Modal title="Create an account" open={isModalOpen} onCancel={() => setIsModalOpen(false)} footer={null}>
                 <form className={styles.form_container}>
-                <p className={styles.title_input} >Select your email</p>
+                    <p className={styles.title_input} >Select your email</p>
                     <Input
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
@@ -49,7 +50,10 @@ export default function SignIn() {
                         onChange={(e) => setPassword(e.target.value)}
                         iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
                     />
-                    <button onClick={signIn} className={styles.btn} >Sign In</button>
+                    <div className={styles.footer_container} >
+                        <span>If you still dont have you can <RegistModal /></span>
+                        <button onClick={signIn} className={styles.btn} >Sign In</button>
+                    </div>
                     {contextHolder}
                 </form>
             </Modal>
