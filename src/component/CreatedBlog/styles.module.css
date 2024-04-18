@@ -13,7 +13,11 @@
     border: 2px solid #4096ff;
     border-radius: 10px;
     flex-direction: column;
-    padding: 5px 10px;
+    padding: 20px;
+}
+
+.delete_icon{
+    margin-right: 10px;
 }
 
 .text::-webkit-scrollbar {
@@ -22,6 +26,8 @@
 
 
 .user_info {
+    display: flex;
+    justify-content: space-between;
     text-align: start;
 }
 

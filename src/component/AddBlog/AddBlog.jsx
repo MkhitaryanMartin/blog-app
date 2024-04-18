@@ -8,34 +8,22 @@ import useErrorHandler from '../../hooks/useErrorHandler';
 import EmojiPicker from 'emoji-picker-react';
 import {SmileTwoTone } from '@ant-design/icons'
 
-export default function AddBlog() {
+export default function AddBlog({onSubmit, blogId, submitText=""}) {
     const [user] = useAuthState(auth);
     const [title, setTitle] = useState('');
     const [text, setText] = useState('');
     const [errorHandle, contextHolder] = useErrorHandler();
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const createBlog = async (e) => {
+    const handleSubmit =  (e) => {
         e.preventDefault();
         if (!title || !text) {
             errorHandle();
             return;
         }
-        if (user) {
-            const docRef = await firestore.collection("blogs").add({
-                blogText: text,
-                blogTitle: title,
-                comments: [],
-                uid: user.uid,
-                userName: user.displayName
-            });
-            const docId = docRef.id;
-            await firestore.collection("blogs").doc(docId).update({
-                id: docId
-            });
-            setTitle('');
-            setText('');
-        }
+      onSubmit({title, text, blogId})
+      setTitle('');
+      setText('');
     };
 
     const handleChange = (e) => {
@@ -76,7 +64,7 @@ export default function AddBlog() {
                         name='text'
                     />
                     <div className={styles.buttons_container} >
-                        <button className={styles.btn} onClick={createBlog} >Add Blog</button>
+                        <button className={styles.btn} onClick={handleSubmit} >{submitText}</button>
                         <button className={styles.emoji_btn} onClick={(e) => {
                             e.preventDefault()
                             setIsModalOpen(true)
