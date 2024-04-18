@@ -1,7 +1,7 @@
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { auth, firestore } from '../../firebase';
 import CommentForm from './comment-form';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuthState } from "react-firebase-hooks/auth";
 import { DeleteOutlined, EditOutlined, CommentOutlined } from '@ant-design/icons';
 import {Tooltip } from 'antd';
@@ -142,6 +142,12 @@ const handleOptionChange = (option) => {
   setSelectedOption(option);
 };
 
+useEffect(()=>{
+if(!user){
+    setSelectedOption(null)
+    setSearchBlog("")
+}
+},[user])
 console.log(selectedOption)
     return (
         <section>
@@ -149,7 +155,7 @@ console.log(selectedOption)
             <BlogFilter value={searchBlog} onChange={onChanSearch} onChangeRadio={handleOptionChange} valiuRadio={selectedOption} user={user}/>
             {
                 values && values.filter((value)=>{
-                   if(selectedOption){
+                   if(selectedOption && user){
                     return value?.blogTitle.toLowerCase().includes(searchBlog.toLowerCase()) && user?.uid === value.uid
                    }else{
                     console.log("else", selectedOption)
