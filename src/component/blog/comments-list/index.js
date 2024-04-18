@@ -1,11 +1,13 @@
 import { firestore } from '../../../firebase';
 import CommentForm from '../../comment-form';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { DeleteOutlined, EditOutlined, CommentOutlined } from '@ant-design/icons';
-import { Tooltip } from 'antd';
+import { Avatar, Tooltip } from 'antd';
 import { getDayText } from '../../../utilits/getData';
 import { v4 as uuidv4 } from 'uuid';
-import styles from '../../../pages/blog/styles.module.css'
+import styles from '../../../pages/blog/styles.module.css';
+import { UserOutlined } from '@ant-design/icons';
+
 
 
 export default function CommentList({ value, user }) {
@@ -13,7 +15,7 @@ export default function CommentList({ value, user }) {
     const [openEdte, setOpenEdite] = useState(false);
     const [openAnswer, setOpenAnswer] = useState(false);
     const [parentId, setParentId] = useState("");
-
+    const refBottom = useRef()
 
     const answerComment = async (params) => {
         if (user) {
@@ -21,16 +23,17 @@ export default function CommentList({ value, user }) {
                 const blogRef = firestore.collection("blogs").doc(params.blogId);
                 const blogSnapshot = await blogRef.get();
                 const currentComments = blogSnapshot.data().comments || [];
-                const updatedComments = [...currentComments, { ...params, id: uuidv4(), createdAt: new Date() }];
+                const updatedComments = [...currentComments, { ...params, photoURL: user?.photoURL, id: uuidv4(), createdAt: new Date() }];
                 await blogRef.update({ comments: updatedComments });
                 console.log("New comment added to blog with ID:", params.blogId);
+                refBottom.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
             } catch (error) {
                 console.error("Error adding comment:", error);
             }
         }
-        setIndex({})
+        setIndex({});
     }
-
+    
     const deleteComment = async (blogId, commentId) => {
         try {
             const blogRef = firestore.collection("blogs").doc(blogId);
@@ -77,7 +80,10 @@ export default function CommentList({ value, user }) {
                     
                     <div className={styles.comment_text_block}>
                         <p className={styles.comment_date}>{getDayText(comment.createdAt)}</p>
+                      <div className={styles.avatar_title}>
+                      {comment?.photoURL ? <Avatar src={user?.photoURL} size={44} />:<Avatar size={44} icon={<UserOutlined />} />}
                         <p className={styles.comment_userName}>{comment.userName}</p>
+                      </div>
                         <Tooltip title="comment that was replied to">
                             {comment.parentId ? <a onClick={(e) => {
                                 e.stopPropagation()
@@ -143,6 +149,7 @@ export default function CommentList({ value, user }) {
                     /> : null}
                 </div>
             })}
+            <div ref={refBottom}></div>
         </div>
 
 

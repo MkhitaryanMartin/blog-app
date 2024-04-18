@@ -29,6 +29,7 @@
     display: flex;
     justify-content: space-between;
     text-align: start;
+    background-color: end;
 }
 
 .text {

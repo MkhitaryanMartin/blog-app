@@ -20,6 +20,7 @@
     border-radius: 10px;
     border-top: none;
     min-width: 280px;
+    scroll-behavior: smooth
 }
 .comment{
     display: flex;
@@ -31,7 +32,7 @@
 }
 
 .comment_userName{
-    margin: 0 20px 10px 0;
+    margin-left: 10px;
 }
 
 .comment_date{
@@ -145,7 +146,11 @@
   justify-content: center;
   flex-direction: column;
 }
-
+.avatar_title{
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 20px;
+}
 
 @keyframes fadeInOut {
   0% {

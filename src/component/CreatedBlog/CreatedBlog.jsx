@@ -5,7 +5,8 @@ import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Tooltip, Modal } from 'antd';
 import AddBlog from '../AddBlog/AddBlog';
 import { getDayText } from '../../utilits/getData';
-
+import { UserOutlined } from '@ant-design/icons';
+import {Avatar} from "antd"
 
 export default function CreatedBlog({ blog, deleteBlog, editBlog, user }) {
     const [isOpenModal, setIsOpenModal] = useState(false)
@@ -18,7 +19,7 @@ export default function CreatedBlog({ blog, deleteBlog, editBlog, user }) {
         <div className={styles.main_container} >
             <div className={styles.blog_container}>
                 <div className={styles.user_info}>
-                    <span><SmileOutlined /> {blog.userName} <span>{getDayText(blog?.createdAt)}</span></span>
+                    <span>{blog?.photoURL ? <Avatar src={user?.photoURL} size={44} />:<Avatar size={44} icon={<UserOutlined />} />} {blog.userName} <span>{getDayText(blog?.createdAt)}</span></span>
                     {
                         user?.uid === blog.uid ? <div className={styles.icon_block}>
                             <Tooltip title="Delete yor blog" className={styles.delete_icon}>
