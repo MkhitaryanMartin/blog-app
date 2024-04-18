@@ -13,11 +13,21 @@
     width: auto;
     padding-bottom: 1%;
 }
+
 .title_input {
     font-size: 12px;
     margin: 0;
     padding: 0;
     color: #8d9094;
+}
+
+.customButton {
+border: none;
+box-shadow: none;
+color: blue;
+border-bottom: 1px solid black;
+border-radius: 1px;
+padding: 5px ;
 }
 
 .btn {
