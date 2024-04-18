@@ -1,10 +1,10 @@
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { auth, firestore } from '../../firebase';
 import CommentForm from './comment-form';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuthState } from "react-firebase-hooks/auth";
 import { DeleteOutlined, EditOutlined, CommentOutlined } from '@ant-design/icons';
-import { Tooltip } from 'antd';
+import {Tooltip } from 'antd';
 import AddBlog from '../../component/AddBlog/AddBlog';
 import CreatedBlog from '../../component/CreatedBlog/CreatedBlog';
 import { getDayText } from '../../utilits/getData';
@@ -12,6 +12,9 @@ import SignIn from '../../component/NavBar/SignIn/SignIn';
 import { v4 as uuidv4 } from 'uuid';
 import firebase from 'firebase/compat/app';
 import "./style.css"
+import Input from '../../component/Input/input';
+import BlogFilter from '../../component/blog/blog-filter';
+
 
 
 export default function Blog() {
@@ -23,6 +26,9 @@ export default function Blog() {
     const [openEdte, setOpenEdite] = useState(false);
     const [openAnswer, setOpenAnswer] = useState(false);
     const [parentId, setParentId] = useState("");
+    const [searchBlog, setSearchBlog] = useState("")
+
+
 
     const answerComment = async (params) => {
         if (user) {
@@ -89,7 +95,6 @@ export default function Blog() {
     }
 
     const editBlog = async (params) => {
-        console.log(params)
         try {
             const blogRef = firestore.collection("blogs").doc(params.blogId);
             await blogRef.update({
@@ -128,14 +133,38 @@ const createBlog = async (params)=>{
       
     }
 }
-console.log(values)
+const onChanSearch = (newValue) => {
+    setSearchBlog(newValue);
+}
+const [selectedOption, setSelectedOption] = useState(null);
+
+const handleOptionChange = (option) => {
+  setSelectedOption(option);
+};
+
+useEffect(()=>{
+if(!user){
+    setSelectedOption(null)
+    setSearchBlog("")
+}
+},[user])
+console.log(selectedOption)
     return (
         <section>
             {user ? (<AddBlog  onSubmit={createBlog} submitText='Create blog'/>) : ''}
+            <BlogFilter value={searchBlog} onChange={onChanSearch} onChangeRadio={handleOptionChange} valiuRadio={selectedOption} user={user}/>
             {
-                values && values.map((value, i) => {
+                values && values.filter((value)=>{
+                   if(selectedOption && user){
+                    return value?.blogTitle.toLowerCase().includes(searchBlog.toLowerCase()) && user?.uid === value.uid
+                   }else{
+                    console.log("else", selectedOption)
+                    return value?.blogTitle.toLowerCase().includes(searchBlog.toLowerCase())
+                   }
+                }
+            ).map((value, i) => {
                     return <div key={value.id || i} className='blog'>
-                        <CreatedBlog blog={value} deleteBlog={deleteBlog} editBlog={editBlog}/>
+                        <CreatedBlog blog={value} deleteBlog={deleteBlog} editBlog={editBlog} user={user}/>
                         <div className='blog-comments'>
                             {value.comments.map((comment, i) => {
                                 return <div key={i} className={`comment ${parentId === comment.id ? "active-comment" : ""} ${comment?.uid === user?.uid ? "user-comment" : ""}`} id={comment.id}>
