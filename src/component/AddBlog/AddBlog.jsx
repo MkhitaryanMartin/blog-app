@@ -1,29 +1,30 @@
 import React, { useState } from 'react';
 import styles from './styles.module.css';
-import { Button, Input, Modal } from 'antd';
+import { Input, Modal } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth, firestore } from '../../firebase';
+import { auth } from '../../firebase';
 import useErrorHandler from '../../hooks/useErrorHandler';
 import EmojiPicker from 'emoji-picker-react';
-import {SmileTwoTone } from '@ant-design/icons'
+import { SmileTwoTone } from '@ant-design/icons'
 
-export default function AddBlog({onSubmit, blogId, submitText=""}) {
+export default function AddBlog({ onSubmit, blogId, submitText = "" }) {
     const [user] = useAuthState(auth);
     const [title, setTitle] = useState('');
     const [text, setText] = useState('');
     const [errorHandle, contextHolder] = useErrorHandler();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [test, setTest] = useState('')
 
-    const handleSubmit =  (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         if (!title || !text) {
             errorHandle();
             return;
         }
-      onSubmit({title, text, blogId})
-      setTitle('');
-      setText('');
+        onSubmit({ title, text, blogId })
+        setTitle('');
+        setText('');
     };
 
     const handleChange = (e) => {
@@ -40,8 +41,8 @@ export default function AddBlog({onSubmit, blogId, submitText=""}) {
     };
 
     const handleEmojiClick = (emoji) => {
-        setText(text + emoji.emoji);
-        setIsModalOpen(false)
+        setText(text => text + emoji.emoji);
+        setIsModalOpen(false);
     };
 
     return (
@@ -73,8 +74,8 @@ export default function AddBlog({onSubmit, blogId, submitText=""}) {
                 </form>
 
             </div>
-            <Modal title="Emoji" open={isModalOpen} onCancel={() => setIsModalOpen(false)} footer={null} style={{top: 350}} >
-                <EmojiPicker onEmojiClick={handleEmojiClick} style={{height: "300px", width: "auto"}} />
+            <Modal title="Emoji" open={isModalOpen} onCancel={() => setIsModalOpen(false)} footer={null} style={{ top: 350 }} >
+                <EmojiPicker onEmojiClick={handleEmojiClick} style={{ height: "300px", width: "auto" }} />
             </Modal>
             {contextHolder}
         </div>
