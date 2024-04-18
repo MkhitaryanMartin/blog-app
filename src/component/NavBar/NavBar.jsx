@@ -7,16 +7,12 @@ import { Button, Spin } from 'antd'
 
 export default function NavBar() {
     const [authUser, setAuthUser] = useState(null)
-    const [userName, setUserName] = useState('')
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         const listen = onAuthStateChanged(auth, (user) => {
             if (user) {
                 setAuthUser(user);
-                if (user.displayName) {
-                    setUserName(user.displayName);
-                }
             } else {
                 setAuthUser(null);
             }
@@ -28,6 +24,7 @@ export default function NavBar() {
         };
     }, []);
     
+    console.log(authUser, 'test name')
 
     function userSignOut() {
         setLoading(true) 
@@ -44,7 +41,7 @@ export default function NavBar() {
                     {loading ? (
                         <Spin size="large" />
                     ) : authUser ? (
-                        <div><p>{` ${userName + '` '}s blog `}</p></div>
+                        <div><p>{` ${authUser.email + '` '}s blog `}</p></div>
                     ) : "Dont sign in yet"}
                 </div>
                 {loading ? null : authUser ? (
