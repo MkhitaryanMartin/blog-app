@@ -12,6 +12,7 @@
     "emoji-mart": "^5.5.2",
     "emoji-picker-react": "^4.9.2",
     "firebase": "^10.11.0",
+    "lodash.debounce": "^4.0.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-emoji-render": "^2.0.1",
