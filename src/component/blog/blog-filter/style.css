@@ -10,3 +10,16 @@
 .filter-radio{
     margin-right: 10px;
 }
+
+@media screen and (max-width: 600px) {
+    .blog-filter{
+      flex-direction: column;
+      align-items: center;
+    }
+    .filter-radio{
+        margin-right: 0;
+    }
+    .blog-filter input{
+       margin: 10px 0;
+      }
+}

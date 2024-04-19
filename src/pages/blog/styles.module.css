@@ -19,6 +19,7 @@
     overflow-y: auto;
     border-radius: 10px;
     border-top: none;
+    min-width: 280px;
 }
 .comment{
     display: flex;
@@ -26,7 +27,7 @@
     align-items: flex-start;
     justify-content: center;
     max-width: 100%;
-    min-width: 270px;
+    min-width: 200px;
 }
 
 .comment_userName{
@@ -96,9 +97,15 @@
 .user_comment {
    align-items: flex-end;
    text-align: end;
+   display: flex;
+   justify-content: flex-end;
 }
 .user_comment p{
   color: #1677FF;
+}
+
+.user_comment .comment_userName{
+  margin-right: 0;
 }
 .user_comment .comment_text_icon_block{
   display: flex;
@@ -152,3 +159,23 @@
   }
  
 }
+
+
+@media screen and (max-width:400px) {
+.blog_comments{
+  padding: 10px;
+  justify-content: flex-end;
+  min-width: 100%;
+}
+
+  .user_comment, .comment{
+    display: block;
+    width: 95%;
+    margin: 0;
+ }
+ .comment_text_block{
+  min-width: 100%;
+  padding: 0 5px 5px;
+}
+}
+
