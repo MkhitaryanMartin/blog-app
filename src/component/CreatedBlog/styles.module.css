@@ -54,3 +54,10 @@
     text-align: end;
     align-self: center;
 }
+
+.user_part {
+    display: flex
+}
+.icon_block {
+    align-self: center;
+}
