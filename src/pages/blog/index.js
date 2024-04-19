@@ -62,7 +62,7 @@ export default function Blog() {
         const blogRef = firestore.collection("blogs").doc(params.blogId);
         const blogSnapshot = await blogRef.get();
         const currentComments = blogSnapshot.data().comments || [];
-        const updatedComments = [...currentComments, { ...params, id: uuidv4(), createdAt: new Date() }];
+        const updatedComments = [...currentComments, { ...params, photoURL: user?.photoURL, id: uuidv4(), createdAt: new Date() }];
         await blogRef.update({ comments: updatedComments });
     }
 
@@ -74,7 +74,8 @@ export default function Blog() {
                 comments: [],
                 uid: user.uid,
                 userName: user.displayName,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                photoURL: user?.photoURL
             });
             const docId = docRef.id;
             await firestore.collection("blogs").doc(docId).update({
@@ -92,7 +93,7 @@ export default function Blog() {
         setSelectedOption(option);
     };
 
-
+    console.log(values)
     return (
         <section>
             <div className={styles.creator_blog} >
@@ -122,7 +123,6 @@ export default function Blog() {
                             user={user}
                             value={value}
                         />
-                        
 
                         {user ? <CommentForm
                             handleSubmit={addCommentToBlog}

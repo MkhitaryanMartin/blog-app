@@ -28,16 +28,29 @@
 .user_info {
     display: flex;
     justify-content: space-between;
-    text-align: start;
+    align-items: end;
+    margin-bottom: 20px;
+}
+.user_info  p{
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+}
+
+.user_info p span{
+  margin-right: 10px;
 }
 
 .text {
-    margin-top: 15px;
-    text-align: start;
+    margin-top: 30px;
+    text-align: center;
     overflow-y: auto;
 }
 
 .title {
     overflow-wrap: break-word;
 }
-
+.date{
+    text-align: end;
+    margin-bottom: 20px;
+}
