@@ -7,7 +7,7 @@ import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import useEmailValidation from '../../../hooks/useEmailValidation';
 import useErrorHandler from '../../../hooks/useErrorHandler';
 import { storage } from '../../../firebase';
-import { ref, uploadString, getDownloadURL} from 'firebase/storage';
+import { ref, uploadString, getDownloadURL } from 'firebase/storage';
 import { handleFileChange } from './utilits';
 
 
@@ -19,36 +19,32 @@ export default function RegistModal() {
   const [errorHandle, contextHolder] = useErrorHandler();
   const { email, setEmail, emailError, handleChange, validateEmail } = useEmailValidation();
   const [switchErorr, setSwitchError] = useState(false)
-  const [photo, setPhoto]= useState("")
+  const [photo, setPhoto] = useState("")
 
 
   const registor = async (e) => {
     e.preventDefault();
-  
+
     if (copyPassword !== password || emailError || userName.length < 1) {
       errorHandle(copyPassword !== password ? "Select the correct password" : "Fill all inputs");
       setSwitchError(true);
       return;
     }
-  
+
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-  
       await updateProfile(auth.currentUser, {
         displayName: userName,
-        photoURL: null 
+        photoURL: null
       });
-  
       const photoData = photo;
       const photoRef = ref(storage, `userPhotos/${Date.now()}.jpg`);
       await uploadString(photoRef, photoData, 'data_url');
       const photoURL = await getDownloadURL(photoRef);
-  
       await updateProfile(auth.currentUser, {
         photoURL: photoURL
       });
-  
       setEmail('');
       setPassword('');
       setUsername('');
@@ -57,8 +53,6 @@ export default function RegistModal() {
       errorHandle(error.message);
     }
   }
-  
-  
 
   const handlePassword = (e) => {
     const { name, value } = e.target;
@@ -95,7 +89,7 @@ export default function RegistModal() {
               if (trimmedValue.length <= 16 && !/\s/.test(trimmedValue)) {
                 setUsername(trimmedValue);
                 setSwitchError(false)
-              }else {
+              } else {
                 setSwitchError(true)
               }
             }}
@@ -119,7 +113,7 @@ export default function RegistModal() {
             onChange={handlePassword}
             iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
           />
-          <input type='file'  onChange={(e)=>handleFileChange(e, setPhoto)}/>
+          <input type='file' onChange={(e) => handleFileChange(e, setPhoto)} />
           {contextHolder}
           <button className={styles.btn}>Create</button>
         </form>

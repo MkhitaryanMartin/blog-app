@@ -15,8 +15,13 @@ function Input(props) {
 
 
   const onChange = (event) => {
-    setValue(event.target.value);
-    onChangeDebounce(event.target.value);
+    const newValue = event.target.value
+    if (newValue === ' '){
+      return 
+    }else{
+      setValue(newValue);
+      onChangeDebounce(newValue);
+    }
   };
 
   useLayoutEffect(() => setValue(props.value), [props.value]);

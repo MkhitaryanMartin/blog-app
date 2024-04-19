@@ -41,7 +41,6 @@ export default function AddBlog({ onSubmit, blogId, submitText = "" }) {
 
     const handleEmojiClick = (emoji) => {
         setText(text => text + emoji.emoji);
-        setIsModalOpen(false);
     };
 
     return (
