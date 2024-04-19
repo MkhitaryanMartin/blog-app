@@ -3,7 +3,7 @@ import { auth, firestore } from '../../firebase';
 import CommentForm from '../../component/comment-form';
 import { useEffect, useState } from 'react';
 import { useAuthState } from "react-firebase-hooks/auth";
-import { Button } from 'antd';
+import { Button, Spin } from 'antd';
 import AddBlog from '../../component/AddBlog/AddBlog';
 import CreatedBlog from '../../component/CreatedBlog/CreatedBlog';
 import SignIn from '../../component/NavBar/SignIn/SignIn';
@@ -15,7 +15,7 @@ import { FaPenFancy } from "react-icons/fa6";
 import CommentList from '../../component/blog/comments-list';
 import { customFilter } from './utilits';
 
-
+// commit
 
 export default function Blog() {
     const [user] = useAuthState(auth)
@@ -93,7 +93,7 @@ export default function Blog() {
     };
 
     return (
-        <section>
+        <section className={styles.blog_container}>
             <div className={styles.creator_blog} >
                 {showBlog === true ? <AddBlog onSubmit={createBlog} submitText='Create blog' /> : ''}
                 <span className={styles.blog_button_container} >
@@ -110,7 +110,7 @@ export default function Blog() {
                 user={user}
             />
             {
-                values && customFilter(values, selectedOption, user, searchBlog).map((value, i) => {
+            loading ?  <Spin size="large" className={styles.blog_spin}/>:    values && customFilter(values, selectedOption, user, searchBlog).length ? customFilter(values, selectedOption, user, searchBlog).map((value, i) => {
                     return <div key={value.id || i} className={styles.blog}>
                         <CreatedBlog
                             blog={value}
@@ -132,7 +132,7 @@ export default function Blog() {
                             </div>
                         )}
                     </div>
-                })
+                }): <div className={styles.dont_blogs}><h2>There are no such blogs</h2></div>
             }
         </section>
     )
