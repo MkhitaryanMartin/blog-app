@@ -25,7 +25,6 @@ export default function CommentForm({
 
     const handleEmojiClick = (emoji) => {
         setValue(value => value + emoji.emoji);
-        setIsModalOpen(false);
     };
     return (
         <form className={mode} onSubmit={onSubmit}>
@@ -38,12 +37,12 @@ export default function CommentForm({
                 value={value}
             />
             <Button type="link" htmlType='submit' disabled={!(!!value) || !value.trim()}>{buttonText}</Button>
-            <button 
-            className={styles.emoji_button}
-            onClick={(e) => {
-                e.preventDefault()
-                setIsModalOpen(true)
-            }} ><SmileTwoTone /></button>
+            <button
+                className={styles.emoji_button}
+                onClick={(e) => {
+                    e.preventDefault()
+                    setIsModalOpen(true)
+                }} ><SmileTwoTone /></button>
             <Modal title="Emoji" open={isModalOpen} onCancel={() => setIsModalOpen(false)} footer={null} style={{ top: 350 }} >
                 <EmojiPicker onEmojiClick={handleEmojiClick} style={{ height: "300px", width: "auto" }} />
             </Modal>

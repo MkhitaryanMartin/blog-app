@@ -4,7 +4,13 @@ import "./style.css"
 export default function BlogFilter({ onChange, value, onChangeRadio, valiuRadio, user }) {
     return (
         <div className='blog-filter'>
-            <Input onChange={onChange} value={value} placeholder="Search blogs" />
+            <Input
+                onChange={onChange}
+                value={value}
+                placeholder="Search blogs"
+
+            />
+
             {user && <>
                 <label>
                     <input

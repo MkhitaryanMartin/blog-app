@@ -8,8 +8,6 @@ import { v4 as uuidv4 } from 'uuid';
 import styles from '../../../pages/blog/styles.module.css';
 import { UserOutlined } from '@ant-design/icons';
 
-
-
 export default function CommentList({ value, user }) {
     const [index, setIndex] = useState("");
     const [openEdte, setOpenEdite] = useState(false);
@@ -33,7 +31,7 @@ export default function CommentList({ value, user }) {
         }
         setIndex({});
     }
-    
+
     const deleteComment = async (blogId, commentId) => {
         try {
             const blogRef = firestore.collection("blogs").doc(blogId);
@@ -71,19 +69,19 @@ export default function CommentList({ value, user }) {
     }
 
 
- return (
+    return (
         <div className={styles.blog_comments}>
             {value.comments.map((comment, i) => {
-                return <div key={i} 
-                className={`${styles.comment} ${parentId === comment.id ? styles.active_comment : ""}
+                return <div key={i}
+                    className={`${styles.comment} ${parentId === comment.id ? styles.active_comment : ""}
                  ${comment?.uid === user?.uid ? styles.user_comment : ""}`} id={comment.id}>
-                    
+
                     <div className={styles.comment_text_block}>
                         <p className={styles.comment_date}>{getDayText(comment.createdAt)}</p>
-                      <div className={styles.avatar_title}>
-                      {comment?.photoURL ? <Avatar src={comment?.photoURL} size={44} />:<Avatar size={44} icon={<UserOutlined />} />}
-                        <p className={styles.comment_userName}>{comment.userName}</p>
-                      </div>
+                        <div className={styles.avatar_title}>
+                            {comment?.photoURL ? <Avatar src={comment?.photoURL} size={44} /> : <Avatar size={44} icon={<UserOutlined />} />}
+                            <p className={styles.comment_userName}>{comment.userName}</p>
+                        </div>
                         <Tooltip title="comment that was replied to">
                             {comment.parentId ? <a onClick={(e) => {
                                 e.stopPropagation()
