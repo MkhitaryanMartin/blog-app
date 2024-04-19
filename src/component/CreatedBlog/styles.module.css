@@ -34,7 +34,7 @@
 .user_info  p{
     display: flex;
     justify-content: space-between;
-    align-items: end;
+    align-items: center;
 }
 
 .user_info p span{
@@ -52,5 +52,5 @@
 }
 .date{
     text-align: end;
-    margin-bottom: 20px;
+    align-self: center;
 }
