@@ -36,6 +36,7 @@ export default function CommentForm({
                 onChange={onChange}
                 value={value}
             />
+            <div className={styles.buttons_container}>
             <Button type="link" htmlType='submit' disabled={!(!!value) || !value.trim()}>{buttonText}</Button>
             <button
                 className={styles.emoji_button}
@@ -46,6 +47,7 @@ export default function CommentForm({
             <Modal title="Emoji" open={isModalOpen} onCancel={() => setIsModalOpen(false)} footer={null} style={{ top: 350 }} >
                 <EmojiPicker onEmojiClick={handleEmojiClick} style={{ height: "300px", width: "auto" }} />
             </Modal>
+            </div>
         </form>
     )
 }

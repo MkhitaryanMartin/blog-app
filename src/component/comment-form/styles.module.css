@@ -33,3 +33,11 @@
     cursor: pointer;
     font-size: 30px;
 }
+
+.buttons_container {
+    display: flex;
+}
+
+.buttons_container :first-child {
+    align-self: center;
+}

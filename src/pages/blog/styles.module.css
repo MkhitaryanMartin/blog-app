@@ -11,7 +11,7 @@
 
 .blog_comments{
   border: 2px solid #4096ff;;
-    width: 100%;
+    width: 80%;
     max-width: 1025px;
     padding: 20px;
     margin-bottom: 20px;
@@ -21,6 +21,9 @@
     border-top: none;
     min-width: 280px;
     scroll-behavior: smooth
+}
+.blog ::-webkit-scrollbar {
+  display: none;
 }
 .comment{
     display: flex;
