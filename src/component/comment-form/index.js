@@ -11,7 +11,7 @@ export default function CommentForm({
     handleSubmit,
     buttonText = "",
     params,
-    mode = "comment-form"
+    mode = "comment_form"
 }) {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -27,7 +27,7 @@ export default function CommentForm({
         setValue(value => value + emoji.emoji);
     };
     return (
-        <form className={mode} onSubmit={onSubmit}>
+        <form className={styles[mode]} onSubmit={onSubmit}>
             <TextArea
                 placeholder={placeholder}
                 rows={2}
